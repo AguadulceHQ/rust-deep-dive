@@ -33,6 +33,10 @@ fn main() {
 
     println!("Wow wow we are able to access our string despite being passed to a fn because it was returned to us before the fn ended. Here it is 👉 {} 🎩", string_gets_stolen_but_is_returned);
 
+    let (my_name, my_name_length) = calculate_length(String::from("Luca"));
+
+    println!("Did you know that my name is {} and that's {} characters long? And that we just returned multiple values using a tuple 😮", my_name, my_name_length);
+
     fn take_ownership(your_string: String) {
         println!("take_ownership fn takes a string and doesn't give it back so main can't access it anymore because Rust will free the memory once out of scope. Here it is 👉 {} 💸", your_string);
     }
@@ -41,5 +45,11 @@ fn main() {
         println!("take_ownership_but_gives_it_back fn takes a string and gives it back so main can still access it after the function is done. Here it is 👉 {} 🤯", your_string);
         // this is an expression
         your_string
+    }
+
+    fn calculate_length(name: String) -> (String, usize) {
+        let length = name.len();
+
+        (name, length)
     }
 }
