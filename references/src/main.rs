@@ -28,6 +28,9 @@ fn main() {
 
     println!("Wow the mutable reference after the immutable ones works because those have been dropped {} 🤯", reference3);
 
+    let string_from_fn_no_dangling = return_value_otherwise_dangling();
+
+    println!("We are 🔙 in main and accessing the value returned. If it was a pointer to the variable we woulnd't be able because no dangling references are allowed \n {} 🎩", string_from_fn_no_dangling);
     fn calculate_length_of_borrowed_strings(s: &String) -> usize {
         // s doesn't have ownership so the value of "s" is not dropped we never had ownership in the first place
         s.len()
@@ -35,5 +38,11 @@ fn main() {
 
     fn modify_borrowed_strings(s: &mut String) {
         s.push_str(" I am a fn that modified the original string");
+    }
+
+    fn return_value_otherwise_dangling() -> String {
+        let string_to_main_from_fn = String::from(" I am a string from fn getting returned to main otherwise the variable in main will err because dangling is not allowed 🔝");
+        // we cannot have -> &String and return & because the variable we declare here would go out of scope and main won't be able to access it
+        string_to_main_from_fn
     }
 }
