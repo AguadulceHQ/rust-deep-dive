@@ -16,6 +16,14 @@ fn main() {
 
     println!("We are slicing thanks to our flexible fn API the first name from a String and also from a string literal 🔝 {} {}", sliced_first_name, sliced_first_name_literal);
 
+    let numbers = [0, 17, 42, 100];
+
+    let favorite_numbers = &numbers[1..3];
+
+    assert_eq!(favorite_numbers, &[17, 42]);
+
+    println!("If I can 🖨️  this it means that my favorite numbers are 17 and 42 👏");
+
     // we accept &str so that it works both for String literals and slices!
     fn slice_first_name(full_name: &str) -> &str {
         let bytes = full_name.as_bytes();
