@@ -1,3 +1,4 @@
+#[derive(Debug)]
 struct TeamMember {
     email: String,
     karma: u64,
@@ -27,7 +28,7 @@ fn main() {
         luca.karma, luca.on_vacation
     );
 
-    let luca_clone = TeamMember { karma: 666, ..luca };
+    let luca_clone = TeamMember { karma: 100, ..luca };
 
     println!(
         "We needed to clone Luca and so we did 🤖. The new Luca has a karma score of {} 🤯",
@@ -41,4 +42,11 @@ fn main() {
     let Availability(start, finish) = luca_clone_availability;
 
     println!("And just a friendly reminder as we are here that we can deconstruct tuple's value and in fact they are the same from {} to {} 📝", start, finish);
+    println!("Let's test out the dbg! macro on our struct 🔍");
+
+    dbg!(&luca_clone);
+
+    println!("We can also debug single expressions to make sure they match our expectations 🤯");
+
+    dbg!(luca_clone.karma * 2);
 }
