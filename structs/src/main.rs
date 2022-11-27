@@ -24,4 +24,11 @@ fn main() {
         "My karma level is {} and in case you wonder if I am on vacation that's...{} 🤨",
         luca.karma, luca.on_vacation
     );
+
+    let luca_clone = TeamMember { karma: 666, ..luca };
+
+    println!(
+        "We needed to clone Luca and so we did 🤖. The new Luca has a karma score of {} 🤯",
+        luca_clone.karma
+    );
 }
