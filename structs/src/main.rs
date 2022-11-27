@@ -6,6 +6,8 @@ struct TeamMember {
     role: String,
 }
 
+struct Availability(char, char);
+
 fn main() {
     let luca = TeamMember {
         email: String::from("luca@aguadulcehq.com"),
@@ -31,4 +33,12 @@ fn main() {
         "We needed to clone Luca and so we did 🤖. The new Luca has a karma score of {} 🤯",
         luca_clone.karma
     );
+
+    let luca_clone_availability = Availability('M', 'S');
+
+    println!("Using a tuple struct we understood that Luca's clone is available from {} to {}...he is a bot! 🦾", luca_clone_availability.0, luca_clone_availability.1);
+
+    let Availability(start, finish) = luca_clone_availability;
+
+    println!("And just a friendly reminder as we are here that we can deconstruct tuple's value and in fact they are the same from {} to {} 📝", start, finish);
 }
