@@ -18,6 +18,16 @@ impl TeamMember {
         }
     }
 
+    fn create_monster(karma: u64) -> Self {
+        Self {
+            email: String::from("Default"),
+            karma,
+            on_vacation: false,
+            nickname: String::from("Monster"),
+            role: String::from("Default"),
+        }
+    }
+
     fn on_vacation(&self) -> String {
         let vacation_message = format!(
             "{} vacation status is {} reach out at {}",
@@ -76,4 +86,8 @@ fn main() {
         "Let's try also if Rust is able to handle an associated fn with same name as a field {}",
         luca_clone.on_vacation()
     );
+
+    let monster = TeamMember::create_monster(666);
+
+    println!("We created a monster and his karma is {} 🤯", monster.karma);
 }
