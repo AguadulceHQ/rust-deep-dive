@@ -8,6 +8,24 @@ struct TeamMember {
 }
 
 impl TeamMember {
+    fn create(name: String) -> Self {
+        Self {
+            email: String::from("Default"),
+            karma: 0,
+            on_vacation: false,
+            nickname: name,
+            role: String::from("Default"),
+        }
+    }
+
+    fn on_vacation(&self) -> String {
+        let vacation_message = format!(
+            "{} vacation status is {} reach out at {}",
+            self.nickname, self.on_vacation, self.email
+        );
+        vacation_message
+    }
+
     fn profession(&self) -> String {
         let profession = format!("{} is a {}", self.nickname, self.role);
         profession
@@ -45,5 +63,17 @@ fn main() {
     println!(
         "Let's compare our Lucas. Is the 1st better than the 2nd? {} 🏅",
         luca.reputation(&luca_not_as_good)
+    );
+
+    let luca_clone = TeamMember::create(String::from("Luca The Clone"));
+
+    println!(
+        "We cloned Luca through an associated function which is not a method. Can we know his profession? {} 🤯",
+        luca_clone.profession()
+    );
+
+    println!(
+        "Let's try also if Rust is able to handle an associated fn with same name as a field {}",
+        luca_clone.on_vacation()
     );
 }
