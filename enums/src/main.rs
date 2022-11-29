@@ -1,5 +1,5 @@
 #[derive(Debug)]
-enum Roles {
+pub enum Roles {
     Frontend(String),
     Backend(String),
     Fullstack(String, u8),
@@ -15,7 +15,7 @@ fn main() {
     println!("Welcome to defining enums 🔢");
 
     let member_one = Roles::Frontend(String::from("React"));
-    let member_two = Roles::Backend(String::from("Rust, Rocket"));
+    let mut member_two = Roles::Backend(String::from("Rust, Rocket"));
     let member_three = Roles::Fullstack(String::from("React, Rust"), 42);
 
     member_one.greeting();
@@ -31,4 +31,9 @@ fn main() {
     println!("And in fact we can use it write away both knowns and unknowns 👹");
     dbg!(monster);
     dbg!(unknown_monster);
+
+    println!("We can also change the value of an enum provided that we have a mutable ✅");
+    member_two = Roles::Backend(String::from("Rust, Rocket 🚀"));
+    println!("Now member_two should have a nice 🚀");
+    dbg!(member_two);
 }
