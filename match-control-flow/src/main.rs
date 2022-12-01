@@ -18,7 +18,8 @@ fn main() {
 
     println!("Match allows to control the flow according to the value of the variable. I have BTC and it's rating is {} 💰", rating(my_crypto));
     println!("We can also use a catch-all pattern for those values that we don't want to handle explicitly. I have ETH and it's rating is {} 🙀", maximalist_rating(my_altcoin));
-    println!("Match is great to use with enum and bind to their values so that we can run some code. For example my shitcoin may not be that bad 👉 {} 🙏", shit_rating(my_shitcoin));
+    println!("Match is great to use with enum and bind to their values so that we can run some code. For example my shitcoin may not be that bad 👉 {} 🙏", shit_rating(&my_shitcoin));
+    println!("To have less verbose code we can substitute the catch-all pattern with a if let construct 👉 {}", magic_shit_rating(&my_shitcoin));
 }
 
 fn rating(coin: CryptoCoin) -> u8 {
@@ -36,7 +37,7 @@ fn maximalist_rating(coin: CryptoCoin) -> u8 {
     }
 }
 
-fn shit_rating(coin: CryptoCoin) -> u8 {
+fn shit_rating(coin: &CryptoCoin) -> u8 {
     match coin {
         CryptoCoin::Bitcoin => 100,
         CryptoCoin::Altcoin => 10,
@@ -47,5 +48,14 @@ fn shit_rating(coin: CryptoCoin) -> u8 {
             }
             0
         }
+    }
+}
+
+fn magic_shit_rating(coin: &CryptoCoin) -> u8 {
+    if let CryptoCoin::Shitcoin(MarketCapitalization::High) = coin {
+        println!("At least sounds like a high market cap 💩");
+        return 10;
+    } else {
+        0
     }
 }
