@@ -1,5 +1,5 @@
+use crypto_accounting_lib_path::balance_sheet;
 use crypto_accounting_lib_path::balance_sheet::transaction::Transaction;
-
 fn main() {
     let first_transaction = Transaction {
         asset: String::from("BTC"),
@@ -10,4 +10,6 @@ fn main() {
     };
 
     dbg!(first_transaction);
+
+    balance_sheet::demo_transaction();
 }
