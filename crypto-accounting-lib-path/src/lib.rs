@@ -1,6 +1,13 @@
-pub mod balance_sheet {
+mod balance_sheet {
+    struct Invoice {
+        asset: String,
+        amount: f64,
+        date: String,
+        description: String,
+    }
 
-    pub mod transaction {
+    fn balance_sheet_summary() {}
+    mod transaction {
         #[derive(Debug)]
         pub struct Transaction {
             pub asset: String,
@@ -15,11 +22,24 @@ pub mod balance_sheet {
         fn add_to_sales() {}
     }
 
-    mod recoincilation {
-        fn pending_transactions() {}
+    pub mod recoincilation {
 
-        fn pending_invoices() {}
+        fn pending_transactions() {
+            // use super to access parent context
+            super::balance_sheet_summary();
+        }
 
-        fn assign_invoice_to_transaction() {}
+        pub fn pending_invoices() {
+            // no need of super to use a method in scope
+            pending_transactions();
+        }
     }
+}
+
+pub fn check_invoices() {
+    // absolute path
+    crate::balance_sheet::recoincilation::pending_invoices();
+
+    // relative path
+    balance_sheet::recoincilation::pending_invoices();
 }
