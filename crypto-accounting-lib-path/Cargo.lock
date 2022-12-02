@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "crypto-accounting-lib"
+name = "crypto-accounting-lib-path"
 version = "0.1.0"

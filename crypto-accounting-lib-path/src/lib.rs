@@ -1,5 +1,5 @@
-mod balance_sheet {
-    struct Invoice {
+pub mod balance_sheet {
+    pub struct Invoice {
         asset: String,
         amount: f64,
         date: String,
@@ -7,7 +7,7 @@ mod balance_sheet {
     }
 
     fn balance_sheet_summary() {}
-    mod transaction {
+    pub mod transaction {
         #[derive(Debug)]
         pub struct Transaction {
             pub asset: String,
@@ -30,10 +30,28 @@ mod balance_sheet {
         }
 
         pub fn pending_invoices() {
+            let invoice = super::Invoice {
+                asset: String::from("USD"),
+                amount: 0.00,
+                date: String::from("Today"),
+                description: String::from("Default"),
+            };
+
             // no need of super to use a method in scope
             pending_transactions();
         }
     }
+}
+
+pub fn demo_transaction() {
+    // relative path to a pub struct
+    let demo_transaction = balance_sheet::transaction::Transaction {
+        asset: String::from("BTC"),
+        amount: 42.0,
+        invoice: 1,
+        recoinciled: false,
+        description: String::from("Payment to Aguadulce to make it shine! 🤑"),
+    };
 }
 
 pub fn check_invoices() {
