@@ -47,4 +47,21 @@ fn main() {
         *feedback += 2;
         println!("{}", feedback);
     }
+
+    #[derive(Debug)]
+    enum Document {
+        Number(u32),
+        Text(String),
+    }
+
+    let documents = vec![
+        Document::Number(42),
+        Document::Text(String::from("Noneofyourbusiness")),
+    ];
+
+    println!("And we can keep looping like there is no tomorrow");
+
+    for doc in &documents {
+        println!("{:#?}", doc);
+    }
 }
