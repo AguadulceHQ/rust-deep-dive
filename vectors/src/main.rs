@@ -1,6 +1,6 @@
 fn main() {
     // this is immutable we can't push anything in here
-    let feedback: Vec<u32> = Vec::new();
+    let _feedback: Vec<u32> = Vec::new();
     // leveraging a macro to initialize the vector
     let feedback = vec![5, 3, 2];
     println!(
@@ -33,5 +33,18 @@ fn main() {
             first_feedback
         ),
         None => println!("No feedback to print folks"),
+    }
+
+    let feedbacks = vec![5, 3, 2];
+    println!("We can also list all the feedback in a loop with the for loop 🔁");
+    for feedback in &feedbacks {
+        println!("{}", feedback);
+    }
+
+    let mut feedbacks = vec![5, 3, 2];
+    println!("We can also iterate and change their value with a mutable reference. Let's bump our self esteem a bit! 🔁");
+    for feedback in &mut feedbacks {
+        *feedback += 2;
+        println!("{}", feedback);
     }
 }
