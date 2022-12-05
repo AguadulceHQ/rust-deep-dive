@@ -1,5 +1,4 @@
 pub mod balance_sheet {
-
     pub mod transaction {
         #[derive(Debug)]
         pub struct Transaction {
