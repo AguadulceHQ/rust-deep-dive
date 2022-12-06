@@ -38,6 +38,16 @@ struct Color {
     blue: u8,
 }
 
+impl Display for Color {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        write!(
+            f,
+            "RGB ({}, {}, {}) 0x{:0>2X}{:0>2X}{:0>2X}",
+            self.red, self.green, self.blue, self.red, self.green, self.blue
+        )
+    }
+}
+
 fn main() {
     let cities = vec![
         City {
@@ -80,6 +90,6 @@ fn main() {
     ]
     .iter()
     {
-        println!("{:?}", *color);
+        println!("{}", *color);
     }
 }
