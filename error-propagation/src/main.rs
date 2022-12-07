@@ -6,6 +6,10 @@ fn main() {
     let res = read_text_from_file();
 
     println!("{:?}", res);
+
+    let res_operator = read_text_from_file_with_operator();
+
+    println!("{:?}", res_operator);
 }
 
 fn read_text_from_file() -> Result<String, io::Error> {
@@ -26,4 +30,16 @@ fn read_text_from_file() -> Result<String, io::Error> {
         Ok(_) => Ok(text_found),
         Err(e) => Err(e), // here also we return the error to the caller but because it’s the last expression we don’t use the kw
     }
+}
+
+fn read_text_from_file_with_operator() -> Result<String, io::Error> {
+    // we introduce the ? operator
+    let mut text_from_file = File::open("hello.txt")?;
+    // a variable where we hold what we'll read
+    let mut text_found = String::new();
+    // a common operation of reading from file into a string that we reference
+    // text_from_file needs to be a mutable
+    text_from_file.read_to_string(&mut text_found)?;
+    // return the value if success otherwise propagate the error
+    Ok(text_found)
 }
