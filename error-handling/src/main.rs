@@ -45,4 +45,9 @@ fn main() {
             panic!("Problem opening the file: {:?}", error);
         }
     });
+
+    // helper methods for Result<T, E> to give the value back or panic
+    let proposal = File::open("proposal.txt").unwrap(); // this will panic and prints the error message
+    let another_proposal = File::open("another_proposal.txt")
+        .expect("Proposal.txt should be included in this project"); // panics with a custom message
 }
