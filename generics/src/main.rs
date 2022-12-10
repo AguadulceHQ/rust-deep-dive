@@ -5,6 +5,16 @@ struct Feedback<CR, DR> {
     deliverables_rating: DR,
 }
 
+// if the they are both integers
+impl<CR: std::fmt::Display, DR: std::fmt::Display> Feedback<CR, DR> {
+    fn print_score(&self) {
+        println!(
+            "The score is communication_rating {} and deliverables_rating {}. This has been printed by the struct generic method 🤯",
+            self.communication_rating, self.deliverables_rating
+        );
+    }
+}
+
 enum EventStatus<P> {
     Confirmed(P),
     NotConfirmed,
@@ -27,6 +37,13 @@ fn main() {
     };
 
     println!("Feedback release from client is {:?}", feedback);
+
+    let simple_feedback = Feedback {
+        communication_rating: 5,
+        deliverables_rating: 5,
+    };
+
+    simple_feedback.print_score();
 
     let conference = EventStatus::Confirmed(42);
 
