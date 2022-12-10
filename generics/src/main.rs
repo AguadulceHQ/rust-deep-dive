@@ -5,6 +5,11 @@ struct Feedback<CR, DR> {
     deliverables_rating: DR,
 }
 
+enum EventStatus<P> {
+    Confirmed(P),
+    NotConfirmed,
+}
+
 fn main() {
     println!("Generic types allow to avoid code duplication 🔝");
 
@@ -22,6 +27,16 @@ fn main() {
     };
 
     println!("Feedback release from client is {:?}", feedback);
+
+    let conference = EventStatus::Confirmed(42);
+
+    // if conference can be destructured into a Confirmed EventStatus then bind the value it contains to people
+    if let EventStatus::Confirmed(people) = conference {
+        println!(
+            "The event is confirmed and {} people will attend 🎉",
+            people
+        );
+    }
 }
 
 // we need PartialOrd trait so that order is supported for this generic type
