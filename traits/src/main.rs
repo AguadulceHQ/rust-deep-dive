@@ -20,4 +20,19 @@ fn main() {
     );
 
     println!("The rating classification is {}", nps.classification());
+
+    check_score(&nps);
+
+    let new_feedback = returns_evaluationable();
+
+    check_score(&new_feedback);
+}
+
+// we take in an item that implements the trait Evaluation so that we can call that behavior
+fn check_score(score: &impl Evaluation) {
+    println!("{}", score.display());
+}
+
+fn returns_evaluationable() -> impl Evaluation {
+    Feedback { score: 2 }
 }
