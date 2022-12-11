@@ -8,10 +8,16 @@ fn main() {
         feedback.score_to_string()
     );
 
-    let nps = NPS { rating: 5 };
+    println!("The score classification is {}", feedback.classification());
+
+    println!("{}", feedback.display());
+
+    let nps = NPS { rating: 8 };
 
     println!(
-        "The feedback's human readable score is {}",
+        "The feedback's human readable rating is {}",
         nps.score_to_string()
     );
+
+    println!("The rating classification is {}", nps.classification());
 }
