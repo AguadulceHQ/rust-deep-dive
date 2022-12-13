@@ -1,3 +1,8 @@
+#[derive(Debug)]
+struct Client<'a> {
+    name: &'a str,
+}
+
 fn main() {
     let project_one = String::from("Kalbero");
     let project_two = String::from("Apple");
@@ -9,6 +14,13 @@ fn main() {
     let priority = projects_reset_priority(project_one.as_str(), project_two.as_str());
 
     println!("The priority got changed now we will focus on {}", priority);
+
+    let client_name = "David";
+
+    // this is fine because client_name is still in scope
+    let client = Client { name: client_name };
+
+    println!("Our client name is {}", client.name);
 }
 
 fn projects_order<'a>(first_project: &'a str, second_project: &'a str) -> &'a str {
