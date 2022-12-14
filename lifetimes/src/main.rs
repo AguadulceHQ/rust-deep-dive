@@ -21,6 +21,12 @@ fn main() {
     let client = Client { name: client_name };
 
     println!("Our client name is {}", client.name);
+
+    projects_statement(
+        project_one.as_str(),
+        project_two.as_str(),
+        "The top priority project is going to be",
+    );
 }
 
 fn projects_order<'a>(first_project: &'a str, second_project: &'a str) -> &'a str {
@@ -35,4 +41,20 @@ fn projects_order<'a>(first_project: &'a str, second_project: &'a str) -> &'a st
 // so it can safely go out of scope
 fn projects_reset_priority<'a>(first_project: &'a str, second_project: &str) -> &'a str {
     first_project
+}
+
+use std::fmt::Display;
+//  a dummy example take two string slices with same lifetimes
+// accept a message of generic type T with same 'a lifetime as the stirng slices
+// make sure that the message implements the Display trait because we need to print it
+fn projects_statement<'a, T>(first_project: &'a str, second_project: &'a str, message: T) -> &'a str
+where
+    T: Display,
+{
+    if first_project.len() < second_project.len() {
+        println!("{} {}", message, first_project);
+        return first_project;
+    }
+    println!("{} {}", message, second_project);
+    second_project
 }
