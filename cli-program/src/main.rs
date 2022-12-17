@@ -9,8 +9,8 @@ fn main() {
     // we specify that we want a vector of Strings as collect can return other types of collections too
     // Rust generally infers the type but with this method we need to specify as it can return multiple
     let args: Vec<String> = env::args().collect();
-    let query = &args[1];
-    let file_path = &args[2];
+
+    let (query, file_path) = parse_config(&args);
 
     println!("Searching for {}", query);
     println!("In file {}", file_path);
@@ -19,4 +19,12 @@ fn main() {
     let file_contents = fs::read_to_string(file_path).expect("Not able to read the file");
 
     println!("Text is\n\n {}", file_contents);
+}
+
+fn parse_config(args: &[String]) -> (&str, &str) {
+    let query = &args[1];
+    let file_path = &args[2];
+
+    // we return references to arguments to which main has ownership
+    (query, file_path)
 }
