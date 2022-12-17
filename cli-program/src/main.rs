@@ -10,12 +10,26 @@ struct Config {
     file_path: String,
 }
 
+impl Config {
+    fn new(args: &[String]) -> Config {
+        // owned strings go into the new defined struct
+        let query = args[1].clone();
+
+        // generally clone is avoided in this case the tradeoff is worth
+        let file_path = args[2].clone();
+
+        // clone cannot take ownership but only borrow from main
+        // we need to clone those field to have ownership
+        Config { query, file_path }
+    }
+}
+
 fn main() {
     // we specify that we want a vector of Strings as collect can return other types of collections too
     // Rust generally infers the type but with this method we need to specify as it can return multiple
     let args: Vec<String> = env::args().collect();
 
-    let config = parse_config(&args);
+    let config = Config::new(&args);
 
     println!("Searching for {}", config.query);
     println!("In file {}", config.file_path);
@@ -24,17 +38,4 @@ fn main() {
     let file_contents = fs::read_to_string(config.file_path).expect("Not able to read the file");
 
     println!("Text is\n\n {}", file_contents);
-}
-
-// this now returns a Config value
-fn parse_config(args: &[String]) -> Config {
-    // owned strings go into the new defined struct
-    let query = args[1].clone();
-
-    // generally clone is avoided in this case the tradeoff is worth
-    let file_path = args[2].clone();
-
-    // clone cannot take ownership but only borrow from main
-    // we need to clone those field to have ownership
-    Config { query, file_path }
 }
