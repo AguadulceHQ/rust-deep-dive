@@ -44,10 +44,19 @@ fn main() {
     println!("Searching for {}", config.query);
     println!("In file {}", config.file_path);
 
-    run(config);
+    // we use if let because run doesn’t return a value to unwrap
+    // we care only about detecting the error not about () in OK
+    if let Err(e) = run(config) {
+        println!("Application error: {e}");
+        process::exit(1);
+    }
 }
 
-fn run(config: Config) {
-    let file_contents = fs::read_to_string(config.file_path).expect("Not able to read the file");
+use std::error::Error;
+
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    //// we use the ? operator in place of expect, instead of panicking ? will return the error value from the current function to the caller to handle
+    let file_contents = fs::read_to_string(config.file_path)?;
     println!("Text is\n\n {}", file_contents);
+    Ok(())
 }
