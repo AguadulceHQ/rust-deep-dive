@@ -27,6 +27,43 @@ use std::fs;
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     //// we use the ? operator in place of expect, instead of panicking ? will return the error value from the current function to the caller to handle
     let file_contents = fs::read_to_string(config.file_path)?;
-    println!("Text is\n\n {}", file_contents);
+    for line in search(&config.query, &file_contents) {
+        println!("{line}");
+    }
+
     Ok(())
+}
+
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
+#[cfg(test)]
+mod tests {
+    // bring into scope the code in the rest of the library
+    // we use the glob operator to do so
+    use super::*;
+
+    #[test]
+    fn search_kw_in_text() {
+        let query = "safe";
+        // the backlash tells Rust not to put a newline char at the beginning of the contents of this string literal
+        let contents = "\
+        Rust:
+        safe, fast, productive.
+        Pick three.";
+        // check that we return the line that matches our query in that content
+        assert_eq!(
+            vec!["        safe, fast, productive."],
+            search(query, contents)
+        );
+    }
 }
