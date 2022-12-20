@@ -14,7 +14,7 @@ fn main() {
 
     // method of std library that allows to define a non panic error handling otherwise returns the inner value of OK
     let config = Config::build(&args).unwrap_or_else(|err| {
-        println!("Issues in the parameters submitted to the program: {err}");
+        eprintln!("Issues in the parameters submitted to the program: {err}");
 
         // closes the program immediately and returns the exit status code specified
         process::exit(1);
@@ -26,7 +26,7 @@ fn main() {
     // we use if let because run doesn’t return a value to unwrap
     // we care only about detecting the error not about () in OK
     if let Err(e) = cli_program::run(config) {
-        println!("Application error: {e}");
+        eprintln!("Application error: {e}");
         process::exit(1);
     }
 }
