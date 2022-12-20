@@ -46,6 +46,19 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     results
 }
 
+pub fn search_non_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let query = query.to_lowercase();
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.to_lowercase().contains(&query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
 #[cfg(test)]
 mod tests {
     // bring into scope the code in the rest of the library
@@ -59,11 +72,25 @@ mod tests {
         let contents = "\
         Rust:
         safe, fast, productive.
-        Pick three.";
+        Pick three.
+        Safe, fast, productive.";
         // check that we return the line that matches our query in that content
         assert_eq!(
             vec!["        safe, fast, productive."],
             search(query, contents)
         );
+    }
+
+    #[test]
+    fn search_kw_in_text_non_sensitive() {
+        let query = "RUSt";
+        let contents = "\
+        Rust:
+        safe, fast, productive.
+        Pick three.
+        Safe, fast, productive.";
+
+        // Rust: should be the line returned if there is a match
+        assert_eq!(vec!["Rust:"], search_non_sensitive(query, contents));
     }
 }
