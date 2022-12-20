@@ -1,6 +1,9 @@
+use std::env;
+
 pub struct Config {
     pub query: String,
     pub file_path: String,
+    pub ignore_case: bool,
 }
 
 impl Config {
@@ -15,9 +18,19 @@ impl Config {
         // generally clone is avoided in this case the tradeoff is worth
         let file_path = args[2].clone();
 
+        // env::var returns a Result that returns Err variant if the env variable is not set
+        // is_ok returns false if the variable is not set, so we perform a case sensitive search
+        // we use is_ok instead of unwrap/expect because we don’t need the value just know if it’s set or not
+
+        let ignore_case = env::var("IGNORE_CASE").is_ok();
+
         // clone cannot take ownership but only borrow from main
         // we need to clone those field to have ownership
-        Ok(Config { query, file_path })
+        Ok(Config {
+            query,
+            file_path,
+            ignore_case,
+        })
     }
 }
 
@@ -27,7 +40,14 @@ use std::fs;
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     //// we use the ? operator in place of expect, instead of panicking ? will return the error value from the current function to the caller to handle
     let file_contents = fs::read_to_string(config.file_path)?;
-    for line in search(&config.query, &file_contents) {
+
+    let results = if config.ignore_case {
+        search_non_sensitive(&config.query, &file_contents)
+    } else {
+        search(&config.query, &file_contents)
+    }; // this is an assignment
+
+    for line in results {
         println!("{line}");
     }
 
