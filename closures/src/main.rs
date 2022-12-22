@@ -64,4 +64,13 @@ fn main() {
         "The manager selected {:?} and the next project will be {:?}",
         manager_priority, next_project
     );
+
+    let closure_borrows = || {
+        println!(
+            "The closure prints the list of projects with priority: {:?}",
+            pipeline.projects
+        )
+    };
+
+    closure_borrows();
 }
