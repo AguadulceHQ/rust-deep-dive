@@ -73,4 +73,26 @@ fn main() {
     };
 
     closure_borrows();
+
+    let mut projects = vec!["Kalbero", "Qualiv"];
+
+    // we can print here because we borrow the reference
+    println!("List of projects before calling the closure {:?}", projects);
+
+    let mut projects_add = || projects.push("New Project");
+
+    // now we have an active reference from the closure, so we can't borrow for example with a println! here
+    projects_add();
+
+    // but of course we can borrow once the closure returns the mutable reference
+    println!("List after calling the closure: {:?}", projects);
+
+    use std::thread;
+
+    // new thread with closure as an argument its body prints out the vec
+    // we use move to pass ownership to the thread so that following ops can be done there
+    thread::spawn(move || println!("A new thread has been spawn {:?}", projects))
+        .join()
+        .unwrap();
+    // the new thread now owns the projects reference and we can't use it
 }
