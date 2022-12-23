@@ -40,6 +40,13 @@ impl Pipeline {
     }
 }
 
+#[derive(Debug)]
+struct Project {
+    name: String,
+    difficulty: u32,
+    priority: ProjectPriority,
+}
+
 fn main() {
     let pipeline = Pipeline {
         projects: vec![
@@ -95,4 +102,26 @@ fn main() {
         .join()
         .unwrap();
     // the new thread now owns the projects reference and we can't use it
+
+    let mut new_projects = [
+        Project {
+            name: String::from("New Project 1"),
+            difficulty: 5,
+            priority: ProjectPriority::High,
+        },
+        Project {
+            name: String::from("Easy Project"),
+            difficulty: 1,
+            priority: ProjectPriority::Low,
+        },
+    ];
+
+    println!("The new list of projects is {:?}", new_projects);
+    // takes an FnMut closure (the value is not moved but they may change) because it calls the closure multiple times one per each item. Also it doesn’t capture, mutate or move anything so it implements the FnMut trait bounds requirements
+    new_projects.sort_by_key(|p| p.difficulty);
+
+    println!(
+        "The new list of projects ordered by difficulty is {:?}",
+        new_projects
+    );
 }
