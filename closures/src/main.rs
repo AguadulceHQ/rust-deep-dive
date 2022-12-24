@@ -118,7 +118,16 @@ fn main() {
 
     println!("The new list of projects is {:?}", new_projects);
     // takes an FnMut closure (the value is not moved but they may change) because it calls the closure multiple times one per each item. Also it doesn’t capture, mutate or move anything so it implements the FnMut trait bounds requirements
-    new_projects.sort_by_key(|p| p.difficulty);
+    let mut num_sort_operations = 0;
+
+    new_projects.sort_by_key(|p| {
+        num_sort_operations += 1;
+        p.difficulty
+    });
+
+    // because the trait bound FnMut does not move captured values out of their body we need to keep track with a variable that's part of the outside env
+
+    println!("This sorting was done in {num_sort_operations} operations");
 
     println!(
         "The new list of projects ordered by difficulty is {:?}",
