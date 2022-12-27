@@ -2,6 +2,10 @@
 name = "cli-program-doc"
 version = "0.1.0"
 edition = "2021"
+description = "A CLI program that looks for a query within a text and returns all lines that contain the kw"
+license = "MIT OR Apache-2.0"
+homepage = "https://aguadulcehq.com"
+authors = ["Luca <luca@aguadulcehq.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
