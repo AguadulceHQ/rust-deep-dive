@@ -2,5 +2,6 @@
 
 members = [
     "addition", # path to binary crate
+    "add_one",
 ]
 
