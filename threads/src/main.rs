@@ -34,4 +34,20 @@ fn main() {
         println!("Web Server 2 Main Thread Execution #{}", i);
         thread::sleep(Duration::from_millis(1));
     }
+
+    let route = vec!["/index", "/about-us", "/services"];
+
+    let handle = thread::spawn(move || {
+        println!("Web Server 3 - Welcome you 🤖");
+        // we are accessing route and we can because it was safely moved into the env of the spawned thread
+        println!("Listing down all routes available");
+
+        for r in route {
+            println!("Route: {}", r);
+        }
+        // allows a different thread to run in the meantime
+        thread::sleep(Duration::from_millis(1));
+    });
+    // the main thread is not accessing route otherwise the compiler would give an error as its value was moved to the spawned thread
+    handle.join().unwrap();
 }
