@@ -48,4 +48,17 @@ mod tests {
 
         screen.run();
     }
+
+    #[test]
+    fn button_has_required_info() {
+        let button = Box::new(Button {
+            width: 42,
+            height: 42,
+            label: String::from("Submit"),
+        });
+
+        assert_eq!(42, button.width);
+        assert_eq!(42, button.height);
+        assert_eq!(String::from("Submit"), button.label);
+    }
 }
