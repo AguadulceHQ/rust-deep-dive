@@ -28,5 +28,24 @@ pub struct Button {
 impl Draw for Button {
     fn draw(&self) {
         // code to actually draw a button
+        println!("I am a button {} {}", self.width, self.height);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn draw_trait_is_implemented() {
+        let screen = Screen {
+            components: vec![Box::new(Button {
+                width: 42,
+                height: 42,
+                label: String::from("Submit"),
+            })],
+        }; // done with the screen
+
+        screen.run();
     }
 }
