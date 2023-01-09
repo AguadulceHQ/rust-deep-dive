@@ -28,7 +28,7 @@ impl DraftPost {
     }
 
     // take ownership of self (consuming DraftPost instance) and transforming into PendingReviewPost
-    pub fn request_revioew(self) -> PendingReviewPost {
+    pub fn request_review(self) -> PendingReviewPost {
         PendingReviewPost {
             content: self.content,
         }
