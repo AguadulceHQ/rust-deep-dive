@@ -4,6 +4,10 @@ fn main() {
     accounts_list();
 
     balances();
+
+    // let PATTERN = EXPRESSION
+    let account = ("Luca", 121331);
+    share_account_details(&account);
 }
 
 // demonstration of if let pattern and else if let
@@ -43,11 +47,18 @@ fn accounts_list() {
 }
 
 // for loop (0, 'a') tuple pattern
-
 fn balances() {
     let balances = vec![23, 423, 42];
 
     for (index, balance) in balances.iter().enumerate() {
         println!("{} balance for account {}", index, balance)
     }
+}
+
+// function parameter pattern
+fn share_account_details(&(account_holder, account_number): &(&str, i32)) {
+    println!(
+        "Account holder: {}\nAccount number: {}",
+        account_holder, account_number
+    );
 }
