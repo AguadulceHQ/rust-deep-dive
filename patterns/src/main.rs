@@ -1,5 +1,7 @@
 fn main() {
     check_balance();
+
+    accounts_list();
 }
 
 // demonstration of if let pattern and else if let
@@ -20,5 +22,20 @@ fn check_balance() {
         }
     } else {
         println!("Do you have a bank account in the first place?");
+    }
+}
+
+// demonstaration of while let conditional loops
+fn accounts_list() {
+    let mut accounts = Vec::new();
+
+    accounts.push(123);
+    accounts.push(456);
+    accounts.push(789);
+
+    println!("Displaying your accounts");
+
+    while let Some(top) = accounts.pop() {
+        println!("Account #{}", top);
     }
 }
