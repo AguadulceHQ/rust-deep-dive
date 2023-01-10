@@ -2,6 +2,8 @@ fn main() {
     check_balance();
 
     accounts_list();
+
+    balances();
 }
 
 // demonstration of if let pattern and else if let
@@ -37,5 +39,15 @@ fn accounts_list() {
 
     while let Some(top) = accounts.pop() {
         println!("Account #{}", top);
+    }
+}
+
+// for loop (0, 'a') tuple pattern
+
+fn balances() {
+    let balances = vec![23, 423, 42];
+
+    for (index, balance) in balances.iter().enumerate() {
+        println!("{} balance for account {}", index, balance)
     }
 }
