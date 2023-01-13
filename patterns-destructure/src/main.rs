@@ -96,6 +96,35 @@ fn main() {
             println!("Important projects are {first} and {last}")
         }
     }
+
+    let new_feedback = Some(Feedback {
+        communication: 3,
+        overall: 4,
+    });
+
+    // match guard syntax pattern
+    match new_feedback {
+        Some(f) if f.overall < 3 => println!(
+            "When doing a thorough review this feedback should be evaluated carefully as it is {}",
+            f.overall
+        ),
+        // because we are using a match guard the compiler won't check exhaustiveness for us
+        Some(f) => println!("This is a regular feedback, skip in the review"),
+        None => (),
+    }
+
+    let threshold = 3;
+    let new_feedback = new_feedback.unwrap()
+
+    // or operator in match guard
+    match threshold {
+        1 | 2 | 3 if new_feedback.communication < threshold => println!(
+            "When doing a thorough review this feedback should be evaluated carefully as it is {}",
+            new_feedback.communication
+        ),
+        // because we are using a match guard the compiler won't check exhaustiveness for us
+        _ => println!("This is a regular feedback, skip in the review"),
+    }
 }
 
 // ignore pattern for function parameter
