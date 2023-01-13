@@ -114,16 +114,35 @@ fn main() {
     }
 
     let threshold = 3;
-    let new_feedback = new_feedback.unwrap()
+    let new_feedback_two = Feedback {
+        communication: 3,
+        overall: 4,
+    };
 
     // or operator in match guard
     match threshold {
-        1 | 2 | 3 if new_feedback.communication < threshold => println!(
+        1 | 2 | 3 if new_feedback_two.communication < threshold => println!(
             "When doing a thorough review this feedback should be evaluated carefully as it is {}",
-            new_feedback.communication
+            new_feedback_two.communication
         ),
         // because we are using a match guard the compiler won't check exhaustiveness for us
         _ => println!("This is a regular feedback, skip in the review"),
+    }
+
+    // @ operator
+
+    let new_project = ProjectStatus::Quote {
+        time: 32,
+        amount: 500,
+    };
+
+    match new_project {
+        ProjectStatus::Quote {
+            // by using id_variable @ we capture whatever value matched the range while also testing that the value matched the range pattern
+            amount: price @ 0..=1000,
+            time: t,
+        } => println!("This is a small range project: {}$", price),
+        _ => println!("Nothing to be done for this project"),
     }
 }
 
