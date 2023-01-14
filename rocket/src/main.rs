@@ -18,7 +18,14 @@ fn meet(name: &str) -> String {
     format!("You are seeing {}'s agenda", name)
 }
 
+#[catch(404)]
+fn not_found() -> &'static str {
+    "General 404"
+}
+
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, meet, status])
+    rocket::build()
+        .mount("/", routes![index, meet, status])
+        .register("/", catchers![not_found])
 }
