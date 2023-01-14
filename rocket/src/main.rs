@@ -13,7 +13,12 @@ fn status() -> &'static str {
     "We are live 🔥"
 }
 
+#[get("/meet/<name>")]
+fn meet(name: &str) -> String {
+    format!("You are seeing {}'s agenda", name)
+}
+
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, status])
+    rocket::build().mount("/", routes![index, meet, status])
 }
