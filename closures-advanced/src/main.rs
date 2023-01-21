@@ -15,3 +15,20 @@ fn main() {
 
     println!("The results should be 4 and it is {}", computation);
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_calls_the_function_twice() {
+        let result = run_it_twice(increment, 3);
+        assert_eq!(result, 8);
+    }
+
+    #[test]
+    fn it_can_receive_a_closure() {
+        let result = run_it_twice(|x| x + 1, 3);
+        assert_eq!(result, 8);
+    }
+}
