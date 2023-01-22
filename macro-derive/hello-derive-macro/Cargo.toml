@@ -1,0 +1,15 @@
+[package]
+name = "hello-derive-macro"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+proc-macro = true
+
+[dependencies]
+# parses Rust code from a string into a data structure that we can perform operations on
+syn = "1.0"
+# turns syn output data structures back into Rust crate
+quote = "1.0"
