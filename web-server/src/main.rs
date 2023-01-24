@@ -39,4 +39,12 @@ fn connection_handler(mut stream: TcpStream) {
         .collect();
 
     println!("Request received: {:#?}", http_request);
+
+    // send back message's data
+    let response = "HTTP/1.1 200 OK\r\n\r\n";
+
+    // as_bytes converts the string data into bytes
+    // write_all on stream takes &[u8] and sends those bytes directly down the connection
+    // this could fail, a real app should handle it better
+    stream.write_all(response.as_bytes()).unwrap();
 }
