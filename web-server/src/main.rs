@@ -1,4 +1,5 @@
 use std::{
+    fs,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
 };
@@ -40,11 +41,14 @@ fn connection_handler(mut stream: TcpStream) {
 
     println!("Request received: {:#?}", http_request);
 
-    // send back message's data
-    let response = "HTTP/1.1 200 OK\r\n\r\n";
+    // status
+    let status_line = "HTTP/1.1 200 OK";
+    let page = fs::read_to_string("hello.html").unwrap();
+    let length = page.len();
 
-    // as_bytes converts the string data into bytes
-    // write_all on stream takes &[u8] and sends those bytes directly down the connection
-    // this could fail, a real app should handle it better
+    // format macro to add file's contents as the body of the success response
+    // to create a valid HTTP response we add the header Content-Length
+    let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{page}");
+
     stream.write_all(response.as_bytes()).unwrap();
 }
