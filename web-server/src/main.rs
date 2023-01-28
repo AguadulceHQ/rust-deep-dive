@@ -60,24 +60,19 @@ fn connection_handler_with_validation(mut stream: TcpStream) {
     // we use next() to fetch the first item of the iteartor
     let request_line = buf_reader.lines().next().unwrap().unwrap();
 
-    // check if the client requested the / path
-    if request_line == "GET / HTTP/1.1" {
-        let status_line = "HTTP/1.1 200 OK";
-        let page = fs::read_to_string("hello.html").unwrap();
-        let length = page.len();
-
-        // format macro to add file's contents as the body of the success response
-        // to create a valid HTTP response we add the header Content-Length
-        let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{page}");
-
-        stream.write_all(response.as_bytes()).unwrap();
+    // destructure values to a tuple
+    let (status_line, filename) = if request_line == "GET / HTTP/1.1" {
+        ("HTTP/1.1 200 OK", "hello.html")
     } else {
-        let status_line = "HTTP/1.1 404 NOT FOUND";
-        let page = fs::read_to_string("404.html").unwrap();
-        let length = page.len();
+        ("HTTP/1.1 404 NOT FOUND", "404.html")
+    };
 
-        let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{page}");
+    let page = fs::read_to_string(filename).unwrap();
+    let length = page.len();
 
-        stream.write_all(response.as_bytes()).unwrap();
-    }
+    // format macro to add file's contents as the body of the success response
+    // to create a valid HTTP response we add the header Content-Length
+    let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{page}");
+
+    stream.write_all(response.as_bytes()).unwrap();
 }
