@@ -20,6 +20,9 @@ fn main() {
     f = does_nothing_and_returns_long_type();
 }
 
+// rewrite Result<T, E> with a type alias is done frequently
+// type Result<T> = std::result::Result<T, std::io::Error>;
+// so that Result<usize, Error> equals to Result<usize>;
 fn does_nothing_with_long_type(_f: Thunk) {}
 
 fn does_nothing_and_returns_long_type() -> Thunk {
