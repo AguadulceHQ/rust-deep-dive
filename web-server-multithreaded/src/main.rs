@@ -20,7 +20,11 @@ fn main() {
         // this prints in the terminal althoguh the page shows connection reset as we are not writing data
         // println!("Blazingly fast web server folks 🦀");
 
-        connection_handler_with_sleep(stream);
+        // spawn a new thread for each incoming request
+        // this is prone to DoS attacks although works as solution
+        thread::spawn(|| {
+            connection_handler_with_sleep(stream);
+        });
     }
 }
 
