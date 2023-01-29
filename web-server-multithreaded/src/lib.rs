@@ -1,4 +1,10 @@
-pub struct ThreadPool;
+use std::thread;
+pub struct ThreadPool {
+    // we need a place to store threads
+    // JoinHandle is returned by spawn method
+    // we return a the unit type () because the closure we pass to the thread pool handle the connection and don't return anything
+    threads: Vec<thread::JoinHandle<()>>,
+}
 
 impl ThreadPool {
     /// Create a new ThreadPool.
@@ -13,7 +19,15 @@ impl ThreadPool {
         // otherwise we could have used build with a Result as a return type
         // pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError>
         assert!(size > 0);
-        ThreadPool
+
+        // create a fixed sized vector to hold the threads
+        let mut threads = Vec::with_capacity(size);
+
+        for _ in 0..size {
+            // create threads and store them in the vector
+        }
+
+        ThreadPool { threads }
     }
 
     // we emulate the signature from spawn because we want a similar behaviour
