@@ -1,7 +1,18 @@
 pub struct ThreadPool;
 
 impl ThreadPool {
+    /// Create a new ThreadPool.
+    ///
+    /// Size is the number of threads in the pool.
+    /// Size is unsigned as it doesn't make sense to have negative threads
+    /// # Panics
+    ///
+    /// The `new` function will panic if the size is zero.
     pub fn new(size: usize) -> ThreadPool {
+        // for simplicity we want this to be an unrecoverable error
+        // otherwise we could have used build with a Result as a return type
+        // pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError>
+        assert!(size > 0);
         ThreadPool
     }
 
