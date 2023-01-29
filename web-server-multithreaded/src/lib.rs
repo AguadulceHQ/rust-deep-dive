@@ -1,9 +1,10 @@
+// we need this in scope because we are using thread::JoinHandle as the type of items in the vector in ThreadPool
 use std::thread;
 pub struct ThreadPool {
     // we need a place to store threads
-    // JoinHandle is returned by spawn method
-    // we return a the unit type () because the closure we pass to the thread pool handle the connection and don't return anything
-    threads: Vec<thread::JoinHandle<()>>,
+    // we refactor to use Workers because otherwise we had to pass immediately some code to run to the thread
+    // workers will store the thread and then we can pass closures to them to be executed in their thread
+    workers: Vec<Worker>,
 }
 
 impl ThreadPool {
@@ -21,13 +22,14 @@ impl ThreadPool {
         assert!(size > 0);
 
         // create a fixed sized vector to hold the threads
-        let mut threads = Vec::with_capacity(size);
+        let mut workers = Vec::with_capacity(size);
 
         for _ in 0..size {
-            // create threads and store them in the vector
+            // create workers and store them in the vector
+            workers.push(Worker::new(id));
         }
 
-        ThreadPool { threads }
+        ThreadPool { workers }
     }
 
     // we emulate the signature from spawn because we want a similar behaviour
@@ -39,5 +41,22 @@ impl ThreadPool {
         // () after FnOnce because a closure that takes no parameters but returns a unit type
         F: FnOnce() + Send + 'static,
     {
+    }
+}
+
+// a Worker holds a running thread to which it can pass code later
+// id is to distinguish workers one from the other
+// this doesn't need to be public the interface for the client will be the ThreadPool not its internal implementation
+struct Worker {
+    id: usize,
+    thread: thread::JoinHandle<()>,
+}
+
+impl Worker {
+    fn new(id: usize) -> Worker {
+        // here we actually create a thread that keeps running
+        let thread = thread::spawn(|| {});
+
+        Worker { id, thread }
     }
 }
