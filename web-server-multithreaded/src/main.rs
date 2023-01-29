@@ -1,3 +1,5 @@
+use web_server_multithreaded::ThreadPool;
+
 use std::{
     fs,
     io::{prelude::*, BufReader},
@@ -13,6 +15,8 @@ fn main() {
     // it returns Result<T, E> for now we unwrap e.g. if the port is laready bound
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
+    let pool = ThreadPool::new(4);
+
     // incoming method on TcpListener returns an iterator that gives us a sequence of streams of type TcpStream
     for stream in listener.incoming() {
         let stream = stream.unwrap();
@@ -22,7 +26,7 @@ fn main() {
 
         // spawn a new thread for each incoming request
         // this is prone to DoS attacks although works as solution
-        thread::spawn(|| {
+        pool.execute(|| {
             connection_handler_with_sleep(stream);
         });
     }
