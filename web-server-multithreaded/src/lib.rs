@@ -1,5 +1,8 @@
 // we need this in scope because we are using thread::JoinHandle as the type of items in the vector in ThreadPool
-use std::{sync::mpsc, thread};
+use std::{
+    sync::{mpsc, Arc, Mutex},
+    thread,
+};
 pub struct ThreadPool {
     // we need a place to store threads
     // we refactor to use Workers because otherwise we had to pass immediately some code to run to the thread
@@ -28,12 +31,14 @@ impl ThreadPool {
         // crete a new channel/message queue for this ThreadPool
         let (sender, receiver) = mpsc::channel();
 
+        let receiver = Arc::new(Mutex::new(receiver));
+
         // create a fixed sized vector to hold the threads
         let mut workers = Vec::with_capacity(size);
 
         for id in 0..size {
             // create workers and store them in the vector
-            workers.push(Worker::new(id));
+            workers.push(Worker::new(id, Arc::clone(&receiver)));
         }
 
         ThreadPool { workers, sender }
@@ -60,9 +65,14 @@ struct Worker {
 }
 
 impl Worker {
-    fn new(id: usize) -> Worker {
+    // add receiver to the channel that gets sent to the thread
+    // all threads will be receiver ends of the channel
+    // on which ThreadPool can send Jobs
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         // here we actually create a thread that keeps running
-        let thread = thread::spawn(|| {});
+        let thread = thread::spawn(|| {
+            receiver;
+        });
 
         Worker { id, thread }
     }
