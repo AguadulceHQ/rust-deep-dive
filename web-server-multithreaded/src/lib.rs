@@ -1,11 +1,15 @@
 // we need this in scope because we are using thread::JoinHandle as the type of items in the vector in ThreadPool
-use std::thread;
+use std::{sync::mpsc, thread};
 pub struct ThreadPool {
     // we need a place to store threads
     // we refactor to use Workers because otherwise we had to pass immediately some code to run to the thread
     // workers will store the thread and then we can pass closures to them to be executed in their thread
     workers: Vec<Worker>,
+    // sender part of the channel which hold the message queue of jobs
+    sender: mpsc::Sender<Job>,
 }
+
+struct Job;
 
 impl ThreadPool {
     /// Create a new ThreadPool.
@@ -21,15 +25,18 @@ impl ThreadPool {
         // pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError>
         assert!(size > 0);
 
+        // crete a new channel/message queue for this ThreadPool
+        let (sender, receiver) = mpsc::channel();
+
         // create a fixed sized vector to hold the threads
         let mut workers = Vec::with_capacity(size);
 
-        for _ in 0..size {
+        for id in 0..size {
             // create workers and store them in the vector
             workers.push(Worker::new(id));
         }
 
-        ThreadPool { workers }
+        ThreadPool { workers, sender }
     }
 
     // we emulate the signature from spawn because we want a similar behaviour
