@@ -75,8 +75,17 @@ impl Worker {
     // on which ThreadPool can send Jobs
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         // here we actually create a thread that keeps running
-        let thread = thread::spawn(|| {
-            receiver;
+        let thread = thread::spawn(move || loop {
+            // we lock on the receiver to acquire the mutex
+            // we unwrap to panic in case of errors (e.g. poisoned state)
+            // we call recv to receive a Job from the channel
+            // a final unwrap to move past any errors e.g. the sender has shut down
+            let job = receiver.lock().unwrap().recv().unwrap();
+
+            println!("Worker {id} got a job, under execution");
+
+            // we finally execute the closure passed
+            job();
         });
 
         Worker { id, thread }
