@@ -12,7 +12,8 @@ pub struct ThreadPool {
     sender: mpsc::Sender<Job>,
 }
 
-struct Job;
+// we use type alias for this longer type
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 impl ThreadPool {
     /// Create a new ThreadPool.
@@ -53,6 +54,10 @@ impl ThreadPool {
         // () after FnOnce because a closure that takes no parameters but returns a unit type
         F: FnOnce() + Send + 'static,
     {
+        // new Job instance that contains the closure we pass to execute
+        let job = Box::new(f);
+        // send through the channel the job that needs to get down
+        self.sender.send(job).unwrap();
     }
 }
 
