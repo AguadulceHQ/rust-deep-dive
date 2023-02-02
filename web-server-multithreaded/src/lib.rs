@@ -1,7 +1,7 @@
 // we need this in scope because we are using thread::JoinHandle as the type of items in the vector in ThreadPool
 use std::{
     sync::{mpsc, Arc, Mutex},
-    thread,
+    thread::{self, Thread},
 };
 pub struct ThreadPool {
     // we need a place to store threads
@@ -61,12 +61,30 @@ impl ThreadPool {
     }
 }
 
+// prevent stopping threads abruptly with CTRL+C
+// this gets executed when exiting main
+impl Drop for ThreadPool {
+    // self is a mutable reference and we need to be able to mutate worker so we need &mut
+    fn drop(&mut self) {
+        for worker in &mut self.workers {
+            println!("Shutting down worker {}", worker.id);
+            // we'll take the option's value
+            if let Some(thread) = worker.thread.take() {
+                // join on worker's thread, if the call fails we use unwrap to make Rust panic and go in ungraceful shutdown
+                thread.join().unwrap();
+            }
+        }
+    }
+}
+
 // a Worker holds a running thread to which it can pass code later
 // id is to distinguish workers one from the other
 // this doesn't need to be public the interface for the client will be the ThreadPool not its internal implementation
 struct Worker {
     id: usize,
-    thread: thread::JoinHandle<()>,
+    // a Worker that is running will have a Some variant in thread
+    // so when we want to clean up the thread we replace Some with None
+    thread: Option<thread::JoinHandle<()>>,
 }
 
 impl Worker {
@@ -88,6 +106,9 @@ impl Worker {
             job();
         });
 
-        Worker { id, thread }
+        Worker {
+            id,
+            thread: Some(thread),
+        }
     }
 }
