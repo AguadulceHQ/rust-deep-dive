@@ -9,7 +9,7 @@ pub struct ThreadPool {
     // workers will store the thread and then we can pass closures to them to be executed in their thread
     workers: Vec<Worker>,
     // sender part of the channel which hold the message queue of jobs
-    sender: mpsc::Sender<Job>,
+    sender: Option<mpsc::Sender<Job>>,
 }
 
 // we use type alias for this longer type
@@ -42,7 +42,10 @@ impl ThreadPool {
             workers.push(Worker::new(id, Arc::clone(&receiver)));
         }
 
-        ThreadPool { workers, sender }
+        ThreadPool {
+            workers,
+            sender: Some(sender),
+        }
     }
 
     // we emulate the signature from spawn because we want a similar behaviour
@@ -57,7 +60,7 @@ impl ThreadPool {
         // new Job instance that contains the closure we pass to execute
         let job = Box::new(f);
         // send through the channel the job that needs to get down
-        self.sender.send(job).unwrap();
+        self.sender.as_ref().unwrap().send(job).unwrap();
     }
 }
 
@@ -66,6 +69,9 @@ impl ThreadPool {
 impl Drop for ThreadPool {
     // self is a mutable reference and we need to be able to mutate worker so we need &mut
     fn drop(&mut self) {
+        // we drop the sender first so that it closes the channel and doesn't send more messages
+        // all calls to recv will start returning an error
+        drop(self.sender.take());
         for worker in &mut self.workers {
             println!("Shutting down worker {}", worker.id);
             // we'll take the option's value
@@ -94,16 +100,19 @@ impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         // here we actually create a thread that keeps running
         let thread = thread::spawn(move || loop {
-            // we lock on the receiver to acquire the mutex
-            // we unwrap to panic in case of errors (e.g. poisoned state)
-            // we call recv to receive a Job from the channel
-            // a final unwrap to move past any errors e.g. the sender has shut down
-            let job = receiver.lock().unwrap().recv().unwrap();
+            let message = receiver.lock().unwrap().recv();
 
-            println!("Worker {id} got a job, under execution");
-
-            // we finally execute the closure passed
-            job();
+            match message {
+                Ok(job) => {
+                    println!("Worker {id} got a job, under execution");
+                    // we finally execute the closure passed
+                    job();
+                }
+                Err(_) => {
+                    println!("Worker {id} disconnected, shutting down");
+                    break;
+                }
+            }
         });
 
         Worker {
