@@ -18,9 +18,23 @@ struct Printable(i32);
 #[derive(Debug)]
 struct Deep(Printable);
 
+// more complex struct to leverage pretty printing
+#[derive(Debug)]
+struct Project<'a> {
+    name: &'a str,
+    amount: u8,
+}
+
 fn main() {
     println!("Printable: {:?} will print", Printable(42));
 
     // the downside of this is that we don't have control on how this renders
     println!("Deep: {:?} is printable too!", Deep(Printable(42)));
+
+    let new_project = Project {
+        name: "Kalbero",
+        amount: 42,
+    };
+
+    println!("{:#?}", new_project);
 }
