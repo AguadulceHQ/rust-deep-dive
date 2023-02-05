@@ -3,6 +3,7 @@
 // import fmt module to make it available
 use std::fmt;
 
+#[derive(Debug)]
 struct Project<'a> {
     name: &'a str,
     amount: u8,
@@ -24,5 +25,6 @@ fn main() {
         amount: 42,
     };
 
-    println!("{}", new_project);
+    println!("Debug standard: {:?}", new_project);
+    println!("Display custom implementation: {}", new_project);
 }
