@@ -9,6 +9,27 @@ enum WebEvent {
     Click { x: i64, y: i64 },
 }
 
+// type alias are useful if an enum is too long or generic and we want to rename it
+
+enum VeryLongNameThatWeWontType {
+    Add,
+    Subtract,
+}
+
+// create a type alias
+type Operations = VeryLongNameThatWeWontType;
+
+// very useful also here
+impl Operations {
+    fn run(&self, x: i32, y: i32) -> i32 {
+        match self {
+            // self is a type alias under the hood
+            Self::Add => x + y,
+            Self::Subtract => x - y,
+        }
+    }
+}
+
 fn inspect(event: WebEvent) {
     match event {
         WebEvent::PageLoad => println!("Page loaded"),
@@ -36,4 +57,8 @@ fn main() {
     inspect(click);
     inspect(load);
     inspect(unload);
+
+    // we can refer to each variant with its alias
+    let x = Operations::Add;
+    println!("2 plus 3 is {}", x.run(2, 3));
 }
