@@ -19,15 +19,25 @@ struct Unit;
 struct Pair(i32, f32);
 
 // struct with two fields
+#[derive(Debug)]
 struct Point {
     x: f32,
     y: f32,
 }
 
 // reuse structs as data types
+#[derive(Debug)]
 struct Rectangle {
     top_left: Point,
     bottom_right: Point,
+}
+
+fn rect_area(rect: &Rectangle) -> f32 {
+    let &Rectangle {
+        top_left: Point { x: x1, y: y1 },
+        bottom_right: Point { x: x2, y: y2 },
+    } = rect;
+    return (x2 - x1).abs() * (y2 - y1).abs();
 }
 
 fn main() {
@@ -40,7 +50,7 @@ fn main() {
     println!("{:?}", luca);
 
     // initialize a point
-    let point: Point = Point { x: 10.3, y: 0.5 };
+    let point: Point = Point { x: 10.3, y: 5.0 };
 
     // access fields
     println!("Coords ({}, {})", point.x, point.y);
@@ -50,13 +60,16 @@ fn main() {
 
     println!("Second point ({}, {})", bottom_right.x, bottom_right.y);
 
+    // shadowing for our area example
+    let bottom_right = Point { x: 15.2, y: 2.0 };
+
     // destructure the point and bind to variables
     let Point {
         x: left_edge,
         y: top_edge,
     } = point;
 
-    let _rectangle = Rectangle {
+    let rectangle = Rectangle {
         // struct instantiation is an expression
         top_left: Point {
             x: left_edge,
@@ -78,4 +91,6 @@ fn main() {
     let Pair(integer, float) = pair;
 
     println!("Pair contains {:?} and {:?}", integer, float);
+
+    println!("The area of {:?} is {}", &rectangle, rect_area(&rectangle));
 }
