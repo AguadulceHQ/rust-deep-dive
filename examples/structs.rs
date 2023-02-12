@@ -40,6 +40,21 @@ fn rect_area(rect: &Rectangle) -> f32 {
     return (x2 - x1).abs() * (y2 - y1).abs();
 }
 
+fn square(origin: Point, dimension: f32) -> Rectangle {
+    // bring x, y in the scope from origin
+    // let binding those values to x, y
+    // destructuring Point { . } it's just to inform how to do that
+    let Point { x, y } = origin;
+
+    Rectangle {
+        top_left: origin,
+        bottom_right: Point {
+            x: x + dimension,
+            y: y + dimension,
+        },
+    }
+}
+
 fn main() {
     // create a struct with field init shorthand
     let name = String::from("Luca");
@@ -93,4 +108,11 @@ fn main() {
     println!("Pair contains {:?} and {:?}", integer, float);
 
     println!("The area of {:?} is {}", &rectangle, rect_area(&rectangle));
+
+    println!(
+        "The generated square with origin {:?} and dimension {}",
+        point, 3.0
+    );
+
+    println!("Is {:?}", square(point, 3.0));
 }
