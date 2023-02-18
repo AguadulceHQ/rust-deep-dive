@@ -28,4 +28,45 @@ fn main() {
             println!("{}", n);
         }
     }
+
+    // for in construct can interact with an Iterator in several ways
+    // by default it applies into_iter function to the collection but there are other ways too
+    // iter borrows each element of the collection through each iteration, leaving the collection untouched and available to reuse after the loop
+
+    let names = vec!["Luca", "Daniel"];
+
+    for name in names.iter() {
+        match name {
+            &"Luca" => println!("Aye aye!"),
+            _ => println!("Hello {}", name),
+        }
+    }
+
+    println!("Names {:?}", names);
+
+    // into_iter consumes the collection so that the exact data in each iteration is provided
+    // after consumption the collection is no longer available because it's moved within the loop
+    let new_names = vec!["Luca", "Daniel"];
+
+    for name in new_names.into_iter() {
+        match name {
+            "Luca" => println!("Aye aye!"),
+            _ => println!("Hello {}", name),
+        }
+    }
+    // we cannot access names now
+    // println!("Names {:?}", new_names);
+
+    // iter_mut mutably borrows each element of the collection allowing it to be modified in place
+
+    let mut names = vec!["Luca", "Daniel"];
+
+    for name in names.iter_mut() {
+        *name = match name {
+            &mut "Luca" => "Aye aye!",
+            _ => "Hello",
+        }
+    }
+
+    println!("Names {:?}", names);
 }
