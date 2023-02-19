@@ -15,4 +15,30 @@ fn main() {
         // _ means "don't" bind values to a variable
         _ => println!("You aren't any of the above, it doesn't matter who you are"),
     }
+
+    let list = [-1, 0, 1];
+
+    match list {
+        [-1, y, z] => println!(
+            "We know the first item is -1 then list[1] = {} and list[2] = {}",
+            y, z
+        ),
+        // we can ignore single values
+        [-1, _, z] => println!(
+            "We know the first item is -1 then list[1] we don't care and list[2] = {}",
+            z
+        ),
+        // we can bind some and ignore the rest
+        [-1, y, ..] => println!(
+            "We know the first item is -1 then list[1] = {} and we don't care about the rest",
+            y
+        ),
+        // we can also store in another array/slice the type will be infered
+        [-1, y, tail @ ..] => println!(
+            "We know the first item is -1 then list[1] = {} and the rest of whatever is left are {:?}",
+            y, tail
+        ),
+        // we can be more creative store the first, last in variables and the rest into an array
+        [min, middle @ .., max] => println!("We extrapolate min = {} and max {} from the first and last position then the rest is in an array {:?}", min, max, middle),
+    }
 }
