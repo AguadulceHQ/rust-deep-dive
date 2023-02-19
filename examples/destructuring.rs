@@ -1,3 +1,12 @@
+enum Color {
+    Red,
+    Blue,
+    Green,
+    RGB(u32, u32, u32),
+    HSL(u32, u32, u32),
+    CMYK(u32, u32, u32, u32),
+}
+
 fn main() {
     let triple = (-1, 0, 1);
 
@@ -40,5 +49,29 @@ fn main() {
         ),
         // we can be more creative store the first, last in variables and the rest into an array
         [min, middle @ .., max] => println!("We extrapolate min = {} and max {} from the first and last position then the rest is in an array {:?}", min, max, middle),
+    }
+
+    let color = Color::RGB(122, 17, 40);
+
+    println!("What color is it?");
+
+    // destructure an enum
+    match color {
+        Color::Red => println!("The color is red"),
+        Color::Blue => println!("The color is blue"),
+        Color::Green => println!("The color is green"),
+        Color::RGB(r, g, b) => println!(
+            "We got colors in RGB and they are Red: {} Green: {} Blue: {}",
+            r, g, b
+        ),
+        Color::HSL(h, s, l) => println!(
+            "We got colors in HSL and they are Hue: {} Saturation: {} Lightness: {}",
+            h, s, l
+        ),
+        Color::CMYK(c, m, y, k) => println!(
+            "Oh boy they sent a CMYK and it's Cyan: {} Magenta: {} Yellow: {} Key: {}",
+            c, m, y, k
+        ),
+        // all variants have been addressed no need of a catch all
     }
 }
