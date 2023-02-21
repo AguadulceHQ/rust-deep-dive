@@ -55,6 +55,12 @@ fn square(origin: Point, dimension: f32) -> Rectangle {
     }
 }
 
+// struct defined for destructuring example
+struct ThreePoint {
+    xy: (u32, u32),
+    z: u32,
+}
+
 fn main() {
     // create a struct with field init shorthand
     let name = String::from("Luca");
@@ -115,4 +121,17 @@ fn main() {
     );
 
     println!("Is {:?}", square(point, 3.0));
+
+    // destructuring example with match
+    let point = ThreePoint { xy: (1, 2), z: 3 };
+
+    match point {
+        ThreePoint { xy: (1, y), z } => println!("Coords x: 1, y = {} and z = {}", y, z),
+        // destructure structs and rename variables (the order doesn't matter)
+        ThreePoint { z: 3, xy: i } => println!("z is 3 and x, y = {:?}", i),
+
+        // we can always ignore what we don't need
+        ThreePoint { z, .. } => println!("z = {}, we don't need x and y", z),
+        // but we need to include the elements we can't do Point { z }
+    }
 }
