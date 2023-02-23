@@ -43,6 +43,20 @@ impl Rectangle {
     }
 }
 
+// Pair owns resources, two heap allocated integers
+struct Pair(Box<i32>, Box<i32>);
+
+impl Pair {
+    // this method consumes the resources of the caller object
+    // self desugars to self: Self
+    fn destroy(self) {
+        // destructure self
+        let Pair(first, second) = self;
+
+        println!("Destroying Pair({}, {})", first, second);
+    }
+}
+
 fn main() {
     let rectangle = Rectangle {
         // Associated functions are called using double colons
@@ -62,4 +76,8 @@ fn main() {
 
     // Okay! Mutable objects can call mutable methods
     square.translate(1.0, 1.0);
+
+    let pair = Pair(Box::new(1), Box::new(2));
+
+    pair.destroy();
 }
