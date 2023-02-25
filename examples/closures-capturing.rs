@@ -57,4 +57,26 @@ fn main() {
 
     // consume consumes the variables so this can be called only once
     consume();
+
+    // Vec has non copy semantics
+    let list = vec![1, 2, 3];
+
+    // move before || forces closure to take ownership of captured variables
+    let contains = move |needle| list.contains(needle);
+
+    println!("{}", contains(&1));
+    println!("{}", contains(&4));
+
+    // we can't println! list.len() because the borrow checker doesn't allow re-using variable after it has been moved
+    // removing move from closure's signature will cause closure to borrow list immutably
+    // so we could call the above method e.g.
+
+    // Vec has non copy semantics
+    let second_list = vec![1, 2, 3];
+
+    let contains = |needle| second_list.contains(needle);
+
+    println!("{}", contains(&1));
+    println!("{}", contains(&4));
+    println!("{}", second_list.len());
 }
