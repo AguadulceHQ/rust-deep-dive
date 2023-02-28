@@ -29,9 +29,9 @@ fn main() {
 
     // functional approach
     let sum_of_squared_odd_numers: u32 = (0..)
-        .map(|n| n * n)
-        .take_while(|&n_squared| n_squared < upper)
-        .filter(|&n_squared| is_odd(n_squared))
-        .sum();
+        .map(|n| n * n) // for each number in the range square
+        .take_while(|&n_squared| n_squared < upper) // move ahead until this condition is true
+        .filter(|&n_squared| is_odd(n_squared)) // check if odd
+        .sum(); // sum odds
     println!("Functional style: {}", sum_of_squared_odd_numers);
 }
