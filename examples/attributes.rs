@@ -11,9 +11,30 @@ struct Project {
     id: u32,
 }
 
+// configure conditional checks
+
+// gets compiled only if target is linux
+#[cfg(target_os = "linux")]
+fn on_linux() {
+    println!("Running on Linux");
+}
+
+#[cfg(not(target_os = "linux"))]
+fn on_linux() {
+    println!("Not running on Linux");
+}
+
 fn main() {
     let p = Project { id: 3 };
     println!("{:?}", p);
+    on_linux();
+
+    // evaluates to true/false
+    if cfg!(target_os = "linux") {
+        println!("yes this is Linux");
+    } else {
+        println!("Not running on Linux")
+    }
 }
 
 // attributes can take multiple values
