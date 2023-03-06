@@ -18,3 +18,7 @@ fn main() {
 
 // attributes can take multiple values
 // #[attribute(value, value2)]
+
+// attribute that disables the dead_code lint
+#[allow(dead_code)]
+fn unused_function() {}
