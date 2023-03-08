@@ -35,6 +35,8 @@ fn main() {
     } else {
         println!("Not running on Linux")
     }
+
+    conditional_function();
 }
 
 // attributes can take multiple values
@@ -43,3 +45,8 @@ fn main() {
 // attribute that disables the dead_code lint
 #[allow(dead_code)]
 fn unused_function() {}
+
+#[cfg(some_condition)]
+fn conditional_function() {
+    println!("condition met");
+}
