@@ -46,6 +46,8 @@ fn main() {
 #[allow(dead_code)]
 fn unused_function() {}
 
+// custom attribute
+// can be called rustc --cfg some_condition attributes.rs
 #[cfg(some_condition)]
 fn conditional_function() {
     println!("condition met");
